@@ -1,0 +1,34 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<th:block th:fragment="navbar">
+    <head>
+        <div th:replace="~{fragments/header :: head}"></div>
+        <title>navbar</title>
+       
+    </head>
+    <nav class="navbar bg-dark" data-bs-theme="dark" style="position: fixed; top: 0; right: 0; left: 180px;">
+    <div class="container-fluid d-flex justify-content-between align-items-center">
+        <!-- Titolo Dashboard -->
+        <span class="navbar-brand mb-0 h1 fw-bold text-white">Dashboard</span>
+
+        <!-- Form di ricerca (per ADMIN)-->
+        <form class="d-flex flex-grow-1 mx-4" th:action="@{/admin/tickets}" method="get" sec:authorize="hasRole('ADMIN')">
+            <input class="form-control me-2" type="search" name="titolo" placeholder="Search tickets" aria-label="Search">
+            <button class="btn btn-primary" type="submit">Search</button>
+        </form>
+
+        <!-- Pulsante nuovo ticket (per ADMIN)-->
+        <div class="d-flex align-items-center gap-3" sec:authorize="hasRole('ADMIN')">
+            <a th:href="@{/admin/tickets/nuovoTicket}" class="btn btn-outline-primary">+ New Ticket</a>
+        </div>
+
+        <!--Welcome UTENTE-->
+        <div class="d-flex align-items-center gap-3">
+            <span sec:authorize="hasRole('OPERATORE')" class="me-2">
+            Welcome, <strong th:text="${#authentication.name}"></strong>
+            </span>
+        </div>
+    </div>
+</nav>
+</th:block>
+</html>

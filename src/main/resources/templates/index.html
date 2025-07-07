@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Home - Ticket Platform</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .box { border: 1px solid #ccc; padding: 15px; margin-top: 20px; border-radius: 5px; }
+        .admin { background-color: #f8f9fa; }
+        .operatore { background-color: #e9f7ef; }
+        button { padding: 10px 20px; margin-top: 10px; }
+    </style>
+</head>
+<body>
+
+    <h1>🎫 Benvenuto nella Ticket Platform</h1>
+    <p>Accedi per gestire o lavorare sui ticket di supporto tecnico.</p>
+
+    <div class="box admin">
+        <h2>👨‍💼 Sei un Admin?</h2>
+        <p>Puoi creare, modificare e assegnare ticket agli operatori. Hai accesso completo alla dashboard di gestione.</p>
+    </div>
+
+    <div class="box operatore">
+        <h2>👷‍♂️ Sei un Operatore?</h2>
+        <p>Visualizza i ticket assegnati, aggiorna lo stato e aggiungi note. Puoi anche gestire il tuo stato di disponibilità.</p>
+    </div>
+
+    <a th:href="@{/login}"><button>🔐 Accedi al sistema</button></a>
+
+</body>
+</html>

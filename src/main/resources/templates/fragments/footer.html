@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <div th:replace="~{fragments/header :: head}"></div>
+        <div th:replace="~{fragments/navbar :: navbar}"></div>
+        <title>Footer</title>
+    </head>
+    <!--ADMIN Footer-->
+    <footer class="text-center mt-4 py-3 border-top text-muted" sec:authorize="hasRole('ADMIN')">
+        <small>&copy; 2025 Ticket Platform – Admin Area</small>
+    </footer>
+    <!--OPERATORE Footer-->
+    <footer class="text-center mt-4 py-3 border-top text-muted" sec:authorize="hasRole('OPERATORE')">
+        <small>&copy; 2025 Ticket Platform – Operatore Area</small>
+    </footer>
+</html>

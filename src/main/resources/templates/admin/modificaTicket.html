@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Modifica Ticket</title>
+    <th:block th:replace="fragments/header :: head"></th:block>
+</head>
+<body>
+
+<!-- Sidebar sinistra -->
+<div th:replace="fragments/sidebar :: sidebar"></div>
+
+<!-- Container -->
+<div class="container" style="margin-left: 260px; padding-top: 20px;">
+    <div th:replace="fragments/navbar :: navbar"></div>
+
+    <h2 class="mb-4">Modifica Ticket</h2>
+
+    <form th:action="@{|/admin/tickets/modifica/${ticket.id}|}" method="post" th:object="${ticket}">
+
+        <div class="mb-3">
+            <label for="titolo" class="form-label">Titolo</label>
+            <input type="text" id="titolo" th:field="*{titolo}" class="form-control" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="descrizione" class="form-label">Descrizione</label>
+            <textarea id="descrizione" th:field="*{descrizione}" class="form-control" rows="4" required></textarea>
+        </div>
+
+        <div class="mb-3">
+            <label for="stato" class="form-label">Stato</label>
+            <select th:field="*{stato}" class="form-select" required>
+                <option value="DA FARE">Da fare</option>
+                <option value="IN CORSO">In corso</option>
+                <option value="COMPLETATO">Completato</option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label for="categoria" class="form-label">Categoria</label>
+            <select th:field="*{categoria}" class="form-select" required>
+                <option th:each="cat : ${categorie}" th:value="${cat.id}" th:text="${cat.nome}"></option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label for="utente" class="form-label">Assegna a Operatore</label>
+            <select th:field="*{utente}" class="form-select" required>
+                <option th:each="op : ${operatori}" th:value="${op.id}" th:text="${op.username}"></option>
+            </select>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Salva modifiche</button>
+        <a th:href="@{/admin/tickets}" class="btn btn-secondary ms-2">Annulla</a>
+    </form>
+</div>
+
+<!--Footer e Bootstrap Js-->
+<div th:replace="fragments/header :: bootstrapScript"></div>
+<div th:replace="fragments/footer :: footer"></div>
+
+</body>
+</html>

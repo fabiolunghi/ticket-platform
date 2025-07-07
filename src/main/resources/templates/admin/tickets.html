@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Dashboard</title>
+    <th:block th:replace="fragments/header :: head"></th:block>
+</head>
+
+<body>
+    <!-- Sidebar sinistra -->
+    <div th:replace="fragments/sidebar :: sidebar"></div>
+
+    <!-- Messaggio di successo/errore -->
+    <div th:if="${successMessage}" class="alert alert-success mt-3 mb-4" role="alert">
+        <span th:text="${successMessage}"></span>
+    </div>
+
+    <!-- Container -->
+    <div class="container" style="margin-left: 180px; padding-top: 80px;">
+
+        <!-- Navbar con barra di ricerca -->
+        <nav th:replace="fragments/navbar :: navbar"></nav>
+
+        <!-- Tabella della lista di ticket -->
+        <table class="table table-bordered table-striped mt-4">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th style="width: 15%;">Titolo</th>
+                    <th style="width: 25%;">Descrizione</th>
+                    <th>Stato</th>
+                    <th>Categoria</th>
+                    <th>Operatore</th>
+                    <th>Data</th>
+                    <th sec:authorize="hasRole('ADMIN')">Azioni Admin</th>
+                    <th sec:authorize="hasRole('OPERATORE')">Azioni Operatore</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="ticket : ${tickets}">
+                    <td th:text="${ticket.id}"></td>
+                    <td th:text="${ticket.titolo}"></td>
+                    <td th:text="${ticket.descrizione}"></td>
+                    <td th:text="${ticket.stato}"></td>
+                    <td th:text="${ticket.categoria.nome}"></td>
+                    <td th:text="${ticket.utente.username}"></td>
+                    <td th:text="${#temporals.format(ticket.dataCreazione, 'dd/MM/yyyy')}"></td>
+
+                    <!-- SOLO ADMIN: pulsanti Modifica, Dettaglio e Elimina -->
+                                <!--MODIFICA-->
+                    <td class="d-flex justify-content-between" sec:authorize="hasRole('ADMIN')">
+                        <a th:href="@{|/admin/tickets/modifica/${ticket.id}|}"
+                        class="btn btn-sm btn-warning">
+                            <i class="bi bi-pencil"></i>
+                        </a>
+                                <!--DETTAGLIO-->
+                        <a th:href="@{|/admin/tickets/${ticket.id}|}"
+                           class="btn btn-sm btn-outline-primary">
+                           <i class="bi bi-search"></i>
+                        </a>
+                                <!--ELIMINA-->
+                        <form th:action="@{|/admin/tickets/${ticket.id}/delete|}"
+                              method="post"
+                              style="display:inline-block; margin-left: .5rem;"
+                              th:onsubmit="return confirm('Sei sicuro di voler eliminare il ticket #' + [[${ticket.id}]] + '?');">
+                            <button type="submit" class="btn btn-sm btn-danger">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </form>
+                    </td>
+
+                    <!-- SOLO OPERATORE: pulsante Dettaglio -->
+                    <td sec:authorize="hasRole('OPERATORE')">
+                        <a th:href="@{|/operatore/tickets/${ticket.id}|}"
+                           class="btn btn-sm btn-outline-primary">Dettaglio</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Footer e Bootstrap JS -->
+    <div th:replace="~{fragments/header :: bootstrapScript}"></div>
+    <div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>
+

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<th:block th:fragment="sidebar">
+    <div class="d-flex flex-column flex-shrink-0 p-3 bg-dark" style="width: 180px; height: 100vh; position: fixed;">
+        <div class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-decoration-none">
+            <span class="fs-4 fw-bold text-white" sec:authorize="hasRole('ADMIN')">Admin</span>
+            <span class="fs-4 fw-bold text-white" sec:authorize="hasRole('OPERATORE')">Operatore</span>
+        </div>
+        <hr>
+        <!--Lista di tutti i ticket (PER ADMIN)-->
+        <ul class="nav nav-pills flex-column mb-auto" sec:authorize="hasRole('ADMIN')">
+            <li class="nav-item">
+                <a th:href="@{/admin/tickets}" class="btn btn-outline-primary" aria-current="page">
+                    <i class="bi bi-list-task me-2"></i> Ticket
+                </a>
+            </li>
+        </ul>
+        <!--Lista dei ticket assegnati all'operatore (PER OPERATORE)-->
+        <ul class="nav nav-pills flex-column mb-auto" sec:authorize="hasRole('OPERATORE')">
+            <li class="nav-item">
+                <a th:href="@{/operatore/tickets}" class="btn btn-outline-primary" aria-current="page">
+                    <i class="bi bi-list-task me-2"></i> Ticket
+                </a>
+            </li>
+        </ul>
+        <!--Lista degli operatori visibile (per ADMIN)-->
+        <ul class="nav nav-pills flex-column mb-auto" sec:authorize="hasRole('ADMIN')">
+            <li class="nav-item">
+                <a th:href="@{/admin/operatori}" class="btn btn-outline-primary">
+                    <i class="bi bi-list-task me-2"></i> Operatori
+                </a>
+            </li>
+        </ul>
+        <!--Pagina operatore (per OPERATORE)-->
+        <ul class="nav nav-pills flex-column mb-auto" sec:authorize="hasRole('OPERATORE')">
+            <li class="nav-item">
+                <a th:href="@{/operatore/profilo}" class="btn btn-outline-primary">
+                    <i class="bi bi-list-task me-2"></i> Profilo
+                </a>
+            </li>
+        </ul>
+        <hr>
+        <div>
+            <a th:href="@{/logout}" class="btn btn-outline-danger w-100">LOGOUT</a>
+        </div>
+    </div>
+</th:block>
+</html>

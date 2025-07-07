@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Profilo Operatore</title>
+    <th:block th:replace="fragments/header :: head"></th:block>
+</head>
+<body>
+
+    <!-- Sidebar + Navbar -->
+    <div th:replace="fragments/sidebar :: sidebar"></div>
+    <div th:replace="fragments/navbar :: navbar"></div>
+
+    <!-- Container principale -->
+    <div class="container" style="margin-left: 180px; padding-top: 80px;">
+
+        <!-- Titolo pagina -->
+        <div class="mt-4 mb-3">
+            <h2>Il mio Profilo</h2>
+        </div>
+
+        <!-- Dati utente -->
+        <div class="card mb-4">
+            <div class="card-body">
+                <table class="table table-borderless">
+                    <tr>
+                        <th>ID</th>
+                        <td th:text="${utente.id}"></td>
+                    </tr>
+                    <tr>
+                        <th>Username</th>
+                        <td th:text="${utente.username}"></td>
+                    </tr>
+                    <tr>
+                        <th>Nome</th>
+                        <td th:text="${utente.nome}"></td>
+                    </tr>
+                    <tr>
+                        <th>Email</th>
+                        <td th:text="${utente.email}"></td>
+                    </tr>
+                    <tr>
+                        <th>Stato corrente</th>
+                        <td th:text="${utente.stato} ? 'Disponibile' : 'Non disponibile'"></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <!-- Modifica dello stato dell'operatore -->
+        <div class="card mb-4">
+            <div class="card-header">
+                Modifica il tuo Stato
+            </div>
+            <div class="card-body">
+                <form th:action="@{/operatore/profilo/stato}"
+                      method="post"
+                      class="mt-4">
+                    <div class="mb-3">
+                        <label for="stato" class="form-label">Stato Personale</label>
+                        <select id="stato"
+                                name="stato"
+                                class="form-select">
+                            <option value="true"
+                                    th:selected="${utente.stato}">Disponibile</option>
+                            <option value="false"
+                                    th:selected="${!utente.stato}">Non disponibile</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Aggiorna Stato</button>
+
+                    <!-- Messaggi di errore o successo -->
+                    <div th:if="${errorMessage}"
+                         class="alert alert-danger mt-3"
+                         th:text="${errorMessage}"></div>
+                    <div th:if="${successMessage}"
+                         class="alert alert-success mt-3"
+                         th:text="${successMessage}"></div>
+                </form>
+            </div>
+        </div>
+
+    </div> <!-- /container principale -->
+
+    <!-- Bootstrap JS + Footer -->
+    <div th:replace="fragments/header :: bootstrapScript"></div>
+    <div th:replace="fragments/footer :: footer"></div>
+
+</body>
+</html>

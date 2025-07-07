@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <title>Lista Operatori</title>
+    <th:block th:replace="fragments/header :: head"></th:block>
+</head>
+
+<body>
+<div th:replace="fragments/sidebar :: sidebar"></div>
+<div th:replace="fragments/navbar :: navbar"></div>
+
+<div class="container" style="margin-left: 180px; padding-top: 80px;">
+    <h2>Lista degli Operatori</h2>
+
+    <table class="table table-bordered table-striped mt-4">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Nome</th>
+            <th>Stato</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="op : ${operatori}">
+            <td th:text="${op.id}"></td>
+            <td th:text="${op.username}"></td>
+            <td th:text="${op.email}"></td>
+            <td th:text="${op.nome}"></td>
+            <td>
+                <span th:text="${op.stato ? 'Disponibile' : 'Non disponibile'}"></span>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<div th:replace="fragments/header :: bootstrapScript"></div>
+<div th:replace="fragments/footer :: footer"></div>
+</body>
+</html>

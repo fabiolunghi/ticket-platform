@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Dettaglio Ticket</title>
+    <th:block th:replace="fragments/header :: head"></th:block>
+</head>
+<body>
+
+<div th:replace="fragments/sidebar :: sidebar"></div>
+<nav th:replace="fragments/navbar :: navbar"></nav>
+
+<div class="container" style="margin-left: 180px; padding-top: 80px;">
+            <h2>Dettaglio Ticket</h2>
+
+    <table class="table table-bordered mt-4">
+        <tr><th>ID</th><td th:text="${ticket.id}"></td></tr>
+        <tr><th>Titolo</th><td th:text="${ticket.titolo}"></td></tr>
+        <tr><th>Descrizione</th><td th:text="${ticket.descrizione}"></td></tr>
+
+        <!-- RIGA STATO -->
+        <tr>
+            <th>Stato</th>
+            <td>
+                <!-- Solo ADMIN: testo fisso -->
+                <span sec:authorize="hasRole('ADMIN')"
+                      th:text="${ticket.stato}">Stato</span>
+
+                <!-- Solo OPERATORE: form con modifica stato -->
+                <form sec:authorize="hasRole('OPERATORE')"
+                      th:action="@{|/operatore/tickets/${ticket.id}/stato|}"
+                      method="post" class="d-inline-flex align-items-center">
+                    <select name="stato"
+                            class="form-select form-select-sm me-2"
+                            style="width: auto;"
+                            th:value="${ticket.stato}">
+                        <option value="DA FARE" th:selected="${ticket.stato=='DA FARE'}">Da fare</option>
+                        <option value="IN CORSO" th:selected="${ticket.stato=='IN CORSO'}">In corso</option>
+                        <option value="COMPLETATO" th:selected="${ticket.stato=='COMPLETATO'}">Completato</option>
+                    </select>
+                    <button type="submit" class="btn btn-sm btn-primary">Salva</button>
+                </form>
+            </td>
+        </tr>
+
+        <tr><th>Categoria</th><td th:text="${ticket.categoria.nome}"></td></tr>
+        <tr><th>Utente</th><td th:text="${ticket.utente.username}"></td></tr>
+        <tr><th>Data creazione</th>
+            <td th:text="${#temporals.format(ticket.dataCreazione, 'dd/MM/yyyy')}"></td>
+        </tr>
+    </table>
+
+    <!-- Lista note -->
+    <h4 class="mt-5">Note</h4>
+    <ul class="list-group">
+    <li class="list-group-item d-flex justify-content-between align-items-start"
+        th:each="nota : ${note}">
+        <div>
+        <strong th:text="${nota.autore.username}"></strong>:
+        <span th:text="${nota.testo}"></span>
+        <span class="text-muted float-end"
+                th:text="${#temporals.format(nota.dataCreazione, 'dd/MM/yyyy HH:mm')}"></span>
+        </div>
+
+        <!-- Form elimina nota (ADMIN) -->
+        <form sec:authorize="hasRole('ADMIN')"
+            th:action="@{|/admin/tickets/${ticket.id}/note/${nota.id}/delete|}"
+            method="post"
+            style="display:inline-block; margin-left:1rem;">
+            <button class="btn btn-danger" type="submit" id="submitButton" onclick="return confirm('Are you sure?')">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash3" viewBox="0 0 16 16">
+                    <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5M11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47M8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5"/>
+                </svg>
+            </button>
+        </form>
+
+        <!-- Form elimina nota (OPERATORE) -->
+        <form sec:authorize="hasRole('OPERATORE')"
+            th:action="@{|/operatore/tickets/${ticket.id}/note/${nota.id}/delete|}"
+            method="post"
+            style="display:inline-block; margin-left:1rem;">
+        <button class="btn btn-danger" type="submit" id="submitButton" onclick="return confirm('Are you sure?')">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash3" viewBox="0 0 16 16">
+                <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5M11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47M8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5"/>
+            </svg>
+        </button>
+        </form>
+    </li>
+    </ul>
+
+
+    <!-- Form per nuova nota OPERATORE -->
+    <form class="mt-4"
+          sec:authorize="hasRole('OPERATORE')"
+          th:action="@{|/operatore/tickets/${ticket.id}/note|}"
+          method="post"
+          th:object="${nuovaNota}">
+        <div class="mb-3">
+            <label for="testo" class="form-label">Aggiungi nota:</label>
+            <textarea th:field="*{testo}" class="form-control" rows="3" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Salva nota</button>
+        <a th:href="@{/operatore/tickets}" class="btn btn-secondary ms-2">Torna alla lista</a>
+    </form>
+
+    <!-- form per nuova nota ADMIN-->
+    <form sec:authorize="hasRole('ADMIN')"
+            th:action="@{|/admin/tickets/${ticket.id}/note|}"
+            method="post"
+            th:object="${nuovaNota}">
+        <div class="mb-3">
+            <label for="testo" class="form-label">Aggiungi nota:</label>
+            <textarea th:field="*{testo}" class="form-control" rows="3" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Aggiungi nota</button>
+        <a th:href="@{/admin/tickets}" class="btn btn-secondary ms-2">Torna alla lista</a>
+    </form>
+
+</div>
+
+<div th:replace="fragments/header :: bootstrapScript"></div>
+<div th:replace="fragments/footer :: footer"></div>
+</body>
+</html>
+
