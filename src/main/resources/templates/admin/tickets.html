@@ -6,19 +6,20 @@
 </head>
 
 <body>
+
     <!-- Sidebar sinistra -->
     <div th:replace="fragments/sidebar :: sidebar"></div>
 
-    <!-- Messaggio di successo/errore -->
-    <div th:if="${successMessage}" class="alert alert-success mt-3 mb-4" role="alert">
-        <span th:text="${successMessage}"></span>
-    </div>
+    <!-- Navbar con barra di ricerca -->
+        <nav th:replace="fragments/navbar :: navbar"></nav>
 
     <!-- Container -->
     <div class="container" style="margin-left: 180px; padding-top: 80px;">
 
-        <!-- Navbar con barra di ricerca -->
-        <nav th:replace="fragments/navbar :: navbar"></nav>
+        <!-- Messaggio di successo/errore -->
+        <div th:if="${successMessage}" class="alert alert-success mt-3 mb-4" role="alert">
+            <span th:text="${successMessage}"></span>
+        </div>
 
         <!-- Tabella della lista di ticket -->
         <table class="table table-bordered table-striped mt-4">
